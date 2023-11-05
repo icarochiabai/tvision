@@ -11,7 +11,7 @@ import numpy as np
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("/home/icarus/untitled.ui", self)
+        uic.loadUi("untitled.ui", self)
         self.setWindowTitle("Teste")
         self.PushButtons()
         
@@ -60,17 +60,20 @@ class MainWindow(QtWidgets.QMainWindow):
             self,
             "Selecione uma imagem",
             "",
-            "Images (*.png, *.jpg, *.jpeg)"
+            "Images (*.png, *.jpg)"
         )
         self.Labels()
         self.SetInitComponentsState(True)
     
     def setScale(self):
+        print(self.filename)
         pygame.init()
         size = (540, 960)
         screen = pygame.display.set_mode(size)
 
         selectedImage = pygame.image.load(self.filename).convert()
+        if selectedImage.get_width() > selectedImage.get_height():
+            selectedImage = pygame.transform.rotate(selectedImage, -90)
         selectedImage = pygame.transform.scale(selectedImage, size)
         screen.blit(selectedImage, (0, 0))
 
@@ -116,6 +119,8 @@ class MainWindow(QtWidgets.QMainWindow):
         screen = pygame.display.set_mode(size)
 
         selectedImage = pygame.image.load(self.filename).convert()
+        if selectedImage.get_width() > selectedImage.get_height():
+            selectedImage = pygame.transform.rotate(selectedImage, -90)
         selectedImage = pygame.transform.scale(selectedImage, size)
         screen.blit(selectedImage, (0, 0))
 
@@ -198,6 +203,8 @@ class MainWindow(QtWidgets.QMainWindow):
             
 
         image = cv.imread(self.filename)
+        if image.shape[1] > image.shape[0]:
+            image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
         img = cv.resize(image, (540, 960))
 
         while True:
@@ -223,7 +230,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             cv.imshow("", self.mask[self.region[1][0]:self.region[1][1], self.region[0][0]:self.region[0][1]])
 
-            k = cv.waitKey(0)
+            k = cv.waitKey(10)
             if k == 27:
                 cv.destroyAllWindows()
                 break 
@@ -241,7 +248,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             cv.imshow("", img[self.region[1][0]:self.region[1][1], self.region[0][0]:self.region[0][1]])
         while True:
-            k = cv.waitKey(0)
+            k = cv.waitKey(10)
             if k == 27:
                 cv.destroyAllWindows()
                 break
