@@ -11,7 +11,7 @@ import numpy as np
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("untitled.ui", self)
+        uic.loadUi("main.ui", self)
         self.setWindowTitle("Teste")
         self.PushButtons()
         
